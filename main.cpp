@@ -18,7 +18,6 @@ const std::vector<const char*> validationLayers = {
     const bool enableValidationLayers = false;
 #else
     const bool enableValidationLayers = true;
-
 #endif
 
 VkResult CreateDebugUtilsMessengerEXT(
@@ -140,9 +139,10 @@ private:
         for (const char* layerName : validationLayers) {
             bool layerFound = false;
             for (const auto& layerProperties : availableLayers) {
-                if (std::strcmp(layerName, layerProperties.layerName) == 0)
+                if (std::strcmp(layerName, layerProperties.layerName) == 0) {
                     layerFound = true;
                     break;
+                }
             }
             if (!layerFound) {
                 return false;
