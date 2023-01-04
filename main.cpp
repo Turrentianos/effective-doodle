@@ -8,6 +8,9 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <cstring>
+#include <cstdint>
+#include <limits>
+#include <algorithm>
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT= 600;
@@ -412,6 +415,30 @@ private:
         }
         return VK_PRESENT_MODE_FIFO_KHR;
     }
+
+    VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
+        if (capabilities.currentExtent.width !=
+            std::numeric_limits<uint32_t>::max()) {
+                return capabilities.currentExtent;
+            } else {
+                int width, height;
+                glfwGetFramebufferSize(window, &width, &height);
+
+                VkExtent2D actualExtent = {
+                    static_cast<uint32_t>(width),
+                    static_cast<uint32_t>(height)
+                };
+
+                actualExtent.width = std::clamp(actualExtent.width,
+                    capabilities.minImageExtent.width,
+                    capabilities.maxImageExtent.width);
+                actualExtent.height = std::clamp(actualExtent.height,
+                    capabilities.minImageExtent.height,
+                    capabilities.maxImageExtent.height);
+                return actualExtent;
+            }
+    }
+
     void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
         createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
