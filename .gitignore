@@ -7,6 +7,9 @@
 *.o
 *.obj
 
+# Complided shaders
+*.spv
+
 # Precompiled Headers
 *.gch
 *.pch
